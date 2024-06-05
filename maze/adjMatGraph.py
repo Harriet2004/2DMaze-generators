@@ -14,73 +14,101 @@ from maze.graph import Graph
 
 
 class AdjMatGraph(Graph):
-    """
-    Represents an undirected graph.  Please complete the implementations of each method.  See the documentation for the parent class
-    to see what each of the overriden methods are meant to do.
-    """
 
     def __init__(self):
-        ### Implement me! ###
-        pass
+        # initialises new graph object with empty adjacency matrix to represent the graph structure
+        self.matrix = {}
 
 
 
     def addVertex(self, label:Coordinates):
-        ### Implement me! ###
-        pass
+        # new vertex with the label is added to the graph
+        # this initialises a dictionary to represent the
+        self.matrix[label] = {}
 
 
 
     def addVertices(self, vertLabels:List[Coordinates]):
-        ### Implement me! ###
-        pass
+        # now for each label in the list, we add it
+        for label in vertLabels:
+            self.addVertex(label)
+            # we access vertLabel again, and make an edge in a 2d form that is defaulted to False
+            for nextlabel in vertLabels:
+                self.matrix[label][nextlabel] = False
 
 
 
     def addEdge(self, vert1:Coordinates, vert2:Coordinates, addWall:bool = False)->bool:
-        ### Implement me! ###
-        # remember to return booleans
-        pass        
-    
+        """ we check if two vertices are adjacent and add the edge accordingly
+            depending on the bool value stored in addWall. Returns true if operation
+            was successful and false otherwise """
+        if vert1.isAdjacent(vert2):
+            self.matrix[vert1][vert2] = addWall
+            self.matrix[vert2][vert1] = addWall
+            return True
+        return False
+
 
 
     def updateWall(self, vert1:Coordinates, vert2:Coordinates, wallStatus:bool)->bool:
-        ### Implement me! ###
-        # remember to return booleans
-        pass
+        """ we check if two vertices are adjacent and add update the wall accordingly
+            depending on the bool value stored in wallStatus. Returns true if operation
+            was successful and false otherwise """
+        if vert1 in self.matrix[vert2] and vert2 in self.matrix[vert1]:
+            if vert1.isAdjacent(vert2):
+                self.matrix[vert1][vert2] = wallStatus
+                self.matrix[vert2][vert1] = wallStatus
+                return True
+        return False
 
 
 
     def removeEdge(self, vert1:Coordinates, vert2:Coordinates)->bool:
-        ### Implement me! ###
-        # remember to return booleans
-        pass
-        
+        # we check if the vertices are adjacent and remove an edge accordingly
+        # returns true if operation was successful and false otherwise
+        if vert1.isAdjacent(vert2):
+            self.matrix[vert1][vert2] = False
+            self.matrix[vert2][vert1] = False
+            return True
+        return False
+
+
 
 
     def hasVertex(self, label:Coordinates)->bool:
-        ### Implement me! ###
-        # remember to return booleans
-        pass
+        # we check if the vertex is present in matrix and return values accordingly
+        # returns true if operation was successful and false otherwise
+        if label in self.matrix:
+            return True
+        return False
 
 
 
     def hasEdge(self, vert1:Coordinates, vert2:Coordinates)->bool:
-        ### Implement me! ###
-        # remember to return booleans
-        pass
+        """ we check if there is an edge in the matrix by checking
+            if the vert1 is there in vert2 and return value accordingly. Returns true if
+            operation was successful and false otherwise """
+        if vert1 in self.matrix[vert2]:
+            return True
+        return False
 
 
 
     def getWallStatus(self, vert1:Coordinates, vert2:Coordinates)->bool:
-        ### Implement me! ###
-        # remember to return booleans
-        pass
+        # check the status of the relationship between vert1 and vert2 and return if there exists one
+        # returns true if operation was successful and false otherwise
+        if self.matrix[vert1][vert2]:
+            return True
+        return False
 
 
 
     def neighbours(self, label:Coordinates)->List[Coordinates]:
-        ### Implement me! ###
-        # remember to return list of coordinates
-        pass
-        
+        # a list for neighbours is created
+        neighbours = []
+        for i in self.matrix[label]:
+            # now for each element in the label, we check if they are neighbours and add to the neighbours list
+            if self.matrix[label][i]:
+                neighbours.append(i)
+        return neighbours
+
