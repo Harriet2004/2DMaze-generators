@@ -2,7 +2,7 @@
 # Please COMPLETE the IMPLEMENTATION of this class.
 # Adjacent list implementation.
 #
-# __author__ = 'Jeffrey Chan', <YOU>
+# __author__ = 'Harriet Mathew', <YOU>
 # __copyright__ = 'Copyright 2024, RMIT University'
 # ------------------------------------------------------------------------
 
@@ -14,74 +14,77 @@ from maze.graph import Graph
 
 
 class AdjListGraph(Graph):
-    """
-    Represents an undirected graph.  Please complete the implementations of each method.  See the documentation for the parent class
-    to see what each of the overriden methods are meant to do.
-    """
 
     def __init__(self):
-        ### Implement me! ###
-        pass
+        # initialises new graph object with empty adjacency list to represent the graph structure
+        self.list = {}
 
 
-        
     def addVertex(self, label:Coordinates):
-        ### Implement me! ###
-        pass
-
-
+        # new vertex with the label is added to the graph
+        # this initialises a dictionary to represent the adjacency list of this vertex
+        self.list[label] = {}
 
     def addVertices(self, vertLabels:List[Coordinates]):
-        ### Implement me! ###
-        pass
-
-
+        # for each vertex in the list, we are calling the addVertex function to add them as a new node
+        for label in vertLabels:
+            self.addVertex(label)
 
     def addEdge(self, vert1:Coordinates, vert2:Coordinates, addWall:bool = False)->bool:
-        ### Implement me! ###
-        # remember to return booleans
-        pass
-        
+        """ we check if two vertices are adjacent and add the edge accordingly
+            depending on the bool value stored in addWall. Returns true if operation
+            was successful and false otherwise """
+        if vert1.isAdjacent(vert2):
+            self.list[vert1][vert2] = addWall
+            self.list[vert2][vert1] = addWall
+            return True
+        return False
 
 
     def updateWall(self, vert1:Coordinates, vert2:Coordinates, wallStatus:bool)->bool:
-        ### Implement me! ###
-        # remember to return booleans
-        pass
-
+        # checking if the vertices are present each other's list of vertices
+        if vert1 in self.list[vert2] and vert2 in self.list[vert1]:
+            # if they are present, we proceed to update the status of the wall
+            # returns true if operation was successful and false otherwise
+            self.list[vert1][vert2] = wallStatus
+            self.list[vert2][vert1] = wallStatus
+            return True
+        return False
 
 
     def removeEdge(self, vert1:Coordinates, vert2:Coordinates)->bool:
-        ### Implement me! ###
-        # remember to return booleans
-        pass
-        
-
+        # we check if the vertices are adjacent and remove an edge accordingly
+        # returns true if operation was successful and false otherwise
+        if vert1.isAdjacent(vert2):
+            self.list[vert1].remove(vert2)
+            self.list[vert2].remove(vert1)
+            return True
+        return False
 
     def hasVertex(self, label:Coordinates)->bool:
-        ### Implement me! ###
-        # remember to return booleans
-        pass
-
+        # checking if the vertex is in the list
+        # returns true if operation was successful and false otherwise
+        if label in self.list:
+            return True
+        else:
+            return False
 
 
     def hasEdge(self, vert1:Coordinates, vert2:Coordinates)->bool:
-        ### Implement me! ###
-        # remember to return booleans
-        pass
-
-
+        # check if an edge exists between the two vertices
+        # returns true if operation was successful and false otherwise
+        if vert1 in self.list[vert2]:
+            return True
+        return False
 
     def getWallStatus(self, vert1:Coordinates, vert2:Coordinates)->bool:
-        ### Implement me! ###
-        # remember to return booleans
-        pass
-        
-    
+        # first checking if the vertices are there in the list
+        if vert1 in self.list[vert2] and vert2 in self.list[vert1]:
+            # then return the status of wall
+            return self.list[vert1][vert2]
+        return False
 
 
     def neighbours(self, label:Coordinates)->List[Coordinates]:
-        ### Implement me! ###
-        # remember to return list of coordinates
-        pass
-        
+        # just return the list of neighbours from the particular of node
+        return self.list[label]
